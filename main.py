@@ -1,31 +1,34 @@
 from fastapi import FastAPI
 import psycopg2
+from pydantic import BaseModel
 
 app = FastAPI()
 
-# Configuración de tu base de datos
-DB_CONFIG = {
-    "dbname": "postgres",
-    "user": "postgres",
-    "password": "rupOmDFlan4y8jLT",
-    "host": "localhost", # O la IP de tu servidor
-    "port": "5432"
-}
+# Reemplaza esto con tu "External Database URL" de Render
+DB_URL = "postgresql://api_bdd_bancomini_user:tu_password@dpg-d6u4vp7kijhs...oregon-postgres.render.com/api_bdd_bancomini"
 
-@app.get("/")
-def read_root():
-    return {"status": "API funcionando"}
+# Modelo de datos para recibir desde Android
+class Nino(BaseModel):
+    nombre: str
+    edad: int
+    correo: str
+    password: str
 
-@app.get("/usuarios")
-def get_usuarios():
+@app.post("/registrar_nino")
+def registrar_nino(nino: Nino):
     try:
-        conn = psycopg2.connect(**DB_CONFIG)
+        conn = psycopg2.connect(DB_URL)
         cur = conn.cursor()
-        cur.execute("SELECT id, nombre FROM usuarios;")
-        usuarios = cur.fetchall()
+        
+        # Insertar en la tabla 'nino' que ya creaste
+        query = "INSERT INTO nino (nombre, edad, correo, password) VALUES (%s, %s, %s, %s) RETURNING id_nino;"
+        cur.execute(query, (nino.nombre, nino.edad, nino.correo, nino.password))
+        
+        nuevo_id = cur.fetchone()[0]
+        conn.commit()
+        
         cur.close()
         conn.close()
-        # Transformamos los datos a un formato JSON que Android entienda
-        return [{"id": u[0], "nombre": u[1]} for u in usuarios]
+        return {"mensaje": "Niño registrado con éxito", "id": nuevo_id}
     except Exception as e:
         return {"error": str(e)}
