@@ -14,13 +14,18 @@ class Nino(BaseModel):
     correo: str
     password: str
 
+class Tutor(BaseModel):
+    nombre: str
+    telefono: str
+    correo: str
+    password: str
+
 @app.post("/registrar_nino")
 def registrar_nino(nino: Nino):
     try:
         conn = psycopg2.connect(DB_URL)
         cur = conn.cursor()
         
-        # Insertar en la tabla 'nino' que ya creaste
         query = "INSERT INTO nino (nombre, edad, correo, password) VALUES (%s, %s, %s, %s) RETURNING id_nino;"
         cur.execute(query, (nino.nombre, nino.edad, nino.correo, nino.password))
         
@@ -30,5 +35,23 @@ def registrar_nino(nino: Nino):
         cur.close()
         conn.close()
         return {"mensaje": "Niño registrado con éxito", "id": nuevo_id}
+    except Exception as e:
+        return {"error": str(e)}@app.post("/registrar_nino")
+    
+
+def registrar_autor(tutor: Tutor):
+    try:
+        conn = psycopg2.connect(DB_URL)
+        cur = conn.cursor()
+        
+        query = "INSERT INTO tutor (nombre, edad, correo, password) VALUES (%s, %s, %s, %s) RETURNING id_tutor;"
+        cur.execute(query, (tutor.nombre, tutor.edad, tutor.correo, tutor.password))
+        
+        nuevo_id = cur.fetchone()[0]
+        conn.commit()
+        
+        cur.close()
+        conn.close()
+        return {"mensaje": "Tutor registrado con éxito", "id": nuevo_id}
     except Exception as e:
         return {"error": str(e)}
