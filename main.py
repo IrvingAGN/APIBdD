@@ -47,8 +47,8 @@ def registrar_tutor(tutor: Tutor):
         conn = psycopg2.connect(DB_URL)
         cur = conn.cursor()
         
-        query = "INSERT INTO tutor (nombre, numero, correo, password) VALUES (%s, %s, %s, %s) RETURNING id_tutor;"
-        cur.execute(query, (tutor.nombre, tutor.numero, tutor.correo, tutor.password))
+        query = "INSERT INTO tutor (nombre, telefono, correo, password) VALUES (%s, %s, %s, %s) RETURNING id_tutor;"
+        cur.execute(query, (tutor.nombre, tutor.telefono, tutor.correo, tutor.password))
         
         nuevo_id = cur.fetchone()[0]
         conn.commit()
