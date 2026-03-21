@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-# Reemplaza esto con tu "External Database URL" de Render
+# External URL de DB
 DB_URL = "postgresql://api_bdd_bancomini_user:xyDekXdHvLwtnnz5ya1Qtkw8YonktGBh@dpg-d6u4vp7kijhs73fgumug-a.oregon-postgres.render.com/api_bdd_bancomini"
 
 # Modelo de datos para recibir desde Android
@@ -19,6 +19,8 @@ class Tutor(BaseModel):
     telefono: str
     correo: str
     password: str
+
+# Rutas para las consultas
 
 @app.post("/registrar_nino")
 def registrar_nino(nino: Nino):
