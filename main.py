@@ -39,6 +39,7 @@ def registrar_nino(nino: Nino):
         return {"error": str(e)}@app.post("/registrar_nino")
     
 
+@app.post("/registrar_autor")
 def registrar_autor(tutor: Tutor):
     try:
         conn = psycopg2.connect(DB_URL)
