@@ -41,7 +41,7 @@ def registrar_nino(nino: Nino):
     except Exception as e:
         return {"error": str(e)}
     
-
+#hola?
 @app.post("/registrar_tutor")
 def registrar_tutor(tutor: Tutor):
     try:
@@ -59,3 +59,4 @@ def registrar_tutor(tutor: Tutor):
         return {"mensaje": "Tutor registrado con éxito", "id": nuevo_id}
     except Exception as e:
         return {"error": str(e)}
+
