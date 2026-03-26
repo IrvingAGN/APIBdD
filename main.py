@@ -29,8 +29,8 @@ def registrar_nino(nino: Nino):
         conn = psycopg2.connect(DB_URL)
         cur = conn.cursor()
         
-        query = "INSERT INTO nino (nombre, edad, correo, password) VALUES (%s, %s, %s, %s) RETURNING id_nino;"
-        cur.execute(query, (nino.nombre, nino.edad, nino.correo, nino.password))
+        query = "INSERT INTO nino (nombre, edad) VALUES (%s, %s) RETURNING id_nino;"
+        cur.execute(query, (nino.nombre, nino.edad))
         
         nuevo_id = cur.fetchone()[0]
         conn.commit()
@@ -62,21 +62,26 @@ def registrar_tutor(tutor: Tutor):
     
 
 #QUERYS DE LA PANTALLA PRINCIPAL
-@app.post("/seleccionar_saldo")
-def seleccionar_saldo(saldo: Nino):
+@app.get("/seleccionar_saldo/{id_nino}")
+def seleccionar_saldo(id_nino: int):
     try:
         conn = psycopg2.connect(DB_URL)
         cur = conn.cursor()
         
-        query = "SELECT saldo FROM nino WHERE nombre = %s AND edad = %s AND password = %s;"
-        cur.execute(query, (Nino.nombre, Nino.edad, Nino.password))
+        query = "SELECT saldo FROM nino WHERE id_nino = %s;"
+        cur.execute(query, (id_nino))
         
-        nuevo_id = cur.fetchone()[0]
+        resultado = cur.fetchone()[0]
         conn.commit()
         
         cur.close()
         conn.close()
-        return {"mensaje": "Tutor registrado con éxito", "id": nuevo_id}
+
+        if resultado:
+            return {"saldo": float(resultado[0])}
+        else:
+            return {"error": "No se encontró una cuenta para este niño"}
+            
     except Exception as e:
         return {"error": str(e)}
 
