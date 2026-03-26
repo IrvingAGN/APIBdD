@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import psycopg2
 from pydantic import BaseModel
 
+#arriba el pachuca :D
 app = FastAPI()
 
 # External URL de DB
