@@ -60,3 +60,21 @@ def registrar_tutor(tutor: Tutor):
     except Exception as e:
         return {"error": str(e)}
 
+@app.post("/registrar_tutor")
+def registrar_tutor(tutor: Tutor):
+    try:
+        conn = psycopg2.connect(DB_URL)
+        cur = conn.cursor()
+        
+        query = "INSERT INTO Nino (nombre, edad, password) VALUES (%s, %s, %s) RETURNING id_nino;"
+        cur.execute(query, (Nino.nombre, Nino.edad, Nino.password))
+        
+        nuevo_id = cur.fetchone()[0]
+        conn.commit()
+        
+        cur.close()
+        conn.close()
+        return {"mensaje": "Tutor registrado con éxito", "id": nuevo_id}
+    except Exception as e:
+        return {"error": str(e)}
+
