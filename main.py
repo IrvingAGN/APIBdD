@@ -12,8 +12,8 @@ DB_URL = "postgresql://api_bdd_bancomini_user:xyDekXdHvLwtnnz5ya1Qtkw8YonktGBh@d
 class Nino(BaseModel):
     nombre: str
     edad: int
-    correo: str
-    password: str
+    id_tutor: int
+
 
 class Tutor(BaseModel):
     nombre: str
