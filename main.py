@@ -6,7 +6,7 @@ from pydantic import BaseModel
 app = FastAPI()
 
 # External URL de DB
-DB_URL = "postgresql://api_bdd_bancomini_user:xyDekXdHvLwtnnz5ya1Qtkw8YonktGBh@dpg-d6u4vp7kijhs73fgumug-a.oregon-postgres.render.com/api_bdd_bancomini"
+DB_URL = "postgresql://bdd_bancomini2_user:pVoA1Eyf203A8OJyjAiEODdJzavDAKbQ@dpg-d7l6oj5ckfvc73a2ju6g-a.oregon-postgres.render.com/bdd_bancomini2"
 
 # Modelo de datos para recibir desde Android
 class Nino(BaseModel):
